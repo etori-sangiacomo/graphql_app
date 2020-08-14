@@ -1,6 +1,6 @@
 require IEx
 
-defmodule GraphqlApp.UserResolver do
+defmodule GraphqlAppWeb.Resolvers.Accounts do
   alias GraphqlApp.Repo
   alias GraphqlApp.Accounts.User
 
@@ -8,7 +8,7 @@ defmodule GraphqlApp.UserResolver do
     {:ok, Repo.all(User)}
   end
 
-  def find(args = %{id: id}, _info) do
+  def find(parent, args = %{id: id}, _info) do
     case Repo.get(User, id) do
       nil -> {:error, "User id #{id} not found"}
       user -> {:ok, user}

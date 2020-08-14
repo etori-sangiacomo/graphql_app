@@ -17,12 +17,22 @@ defmodule GraphqlApp.Blog do
       [%Post{}, ...]
 
   """
-  def list_posts(_count = nil), do: Repo.all(Post)
-  def list_posts(count) do
+  def list_posts(user, %{limit: number}) do
     Post
-    |> limit(^count)
+    |> where([t], t.user_id == ^user.id)
+    |> limit(^number)
     |> Repo.all()
   end
+
+  def list_posts(_number = nil), do: Repo.all(Post)
+
+  def list_posts(number) do
+    Post
+    |> limit(^number)
+    |> Repo.all()
+  end
+
+
 
   @doc """
   Gets a single post.
