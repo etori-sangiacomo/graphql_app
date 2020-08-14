@@ -1,0 +1,34 @@
+defmodule GraphqlApp.Application do
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
+  use Application
+
+  def start(_type, _args) do
+    children = [
+      # Start the Ecto repository
+      GraphqlApp.Repo,
+      # Start the Telemetry supervisor
+      GraphqlAppWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: GraphqlApp.PubSub},
+      # Start the Endpoint (http/https)
+      GraphqlAppWeb.Endpoint
+      # Start a worker by calling: GraphqlApp.Worker.start_link(arg)
+      # {GraphqlApp.Worker, arg}
+    ]
+
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: GraphqlApp.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+
+  # Tell Phoenix to update the endpoint configuration
+  # whenever the application is updated.
+  def config_change(changed, _new, removed) do
+    GraphqlAppWeb.Endpoint.config_change(changed, removed)
+    :ok
+  end
+end
