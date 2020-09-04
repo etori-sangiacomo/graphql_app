@@ -24,6 +24,12 @@ defmodule GraphqlApp.Blog do
     |> Repo.all()
   end
 
+  def list_posts(user, _) do
+    Post
+    |> where([t], t.user_id == ^user.id)
+    |> Repo.all()
+  end
+
   def list_posts(_number = nil), do: Repo.all(Post)
 
   def list_posts(number) do
